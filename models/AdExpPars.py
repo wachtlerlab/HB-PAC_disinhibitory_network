@@ -1,4 +1,4 @@
-from brian2 import nA, mV, ms, nS, pF, nF, uA
+from brian2 import nA, mV, ms, nS, pF, nF, uA, uF
 
 
 resonator = {
@@ -220,7 +220,7 @@ mean_24_08_2016 = {
 std_inits = {
             "w": 0*uA,
             "Vr": -70.6 * mV,#-48.5*mV,
-            "Vt":-50.4 * mV,
+            "Vt": -50.4 * mV,
             "b": 0.0805 * nA,
             "V":-70.4 * mV,
             "sF": 2 * mV,
@@ -229,5 +229,48 @@ std_inits = {
             "gL": 30 * nS,
             "C": 281 * pF,
             "a": 4 * nS,
-            "Vp": -25 * mV
+            "Vp": -25 * mV,
+    "I": 0 * nA
+}
+
+DLInt2Try1 = {
+    "b": 0.0805 * nA,
+    "V": -30*mV,
+    "sF": 2 * mV,
+    "tau": 5 * ms,
+    "EL": -30 * mV,
+    "gL": 200000 * nS,
+    "C": 0.5 * uF,
+    "a": 4 * nS,
+    "Vr": -30 * mV,
+    "Vt": -20 * mV,
+    "Vp": -10 * mV
+}
+
+DLInt1Try1 = {
+    "b": 0.0805 * nA,
+    "V": -30*mV,
+    "sF": 2 * mV,
+    "tau": 1 * ms,
+    "EL": -30 * mV,
+    "gL": 200000 * nS,
+    "C": 0.5 * uF,
+    "a": 200000 * nS,
+    "Vr": -30 * mV,
+    "Vt": -15 * mV,
+    "Vp": -5 * mV
+}
+
+DLInt1Try2 = {
+    "b": 0.0805 * nA,
+    "V": -30*mV,
+    "sF": 2 * mV,
+    "tau": 1 * ms,
+    "EL": -30 * mV,
+    "gL": 200000 * nS,
+    "C": 0.5 * uF,
+    "a": 200000 * nS,
+    "Vr": -30 * mV,
+    "Vt": -25 * mV,
+    "Vp": 0 * mV
 }
