@@ -26,8 +26,8 @@ simDuration = 1100 * units.ms
 inputParsName = 'oneSecondPulse'
 
 DLInt1ModelProps = "DLInt1Try2"
-DLInt1SynapseProps = 'DLInt1_syn_try1'
-dlint1 = DLInt1("DLInt1Try1")
+DLInt1SynapseProps = 'DLInt1_syn_try2'
+dlint1 = DLInt1(DLInt1ModelProps)
 
 opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
 if os.path.isdir(opDir):

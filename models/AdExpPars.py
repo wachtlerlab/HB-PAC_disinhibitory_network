@@ -265,7 +265,7 @@ DLInt1Try2 = {
     "b": 0.0805 * nA,
     "V": -30*mV,
     "sF": 2 * mV,
-    "tau": 1 * ms,
+    "tau": 7.5 * ms,
     "EL": -30 * mV,
     "gL": 200000 * nS,
     "C": 0.5 * uF,
