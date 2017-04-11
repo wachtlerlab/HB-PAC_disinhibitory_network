@@ -15,17 +15,17 @@ sns.set(style="whitegrid", rc=mplPars)
 
 
 # simStepSize = 0.5 * units.ms
-# simDuration = 100 * units.ms
+# simDuration = 200 * units.ms
 # inputParsName = 'onePulse'
 # inputParsName = 'twoPulse'
 # inputParsName = 'threePulse'
 
 
 simStepSize = 0.5 * units.ms
-simDuration = 1100 * units.ms
+simDuration = 1200 * units.ms
 inputParsName = 'oneSecondPulse'
 
-DLInt1ModelProps = "DLInt1Try2"
+DLInt1ModelProps = "DLInt1Aynur"
 DLInt1SynapseProps = 'DLInt1_syn_try2'
 dlint1 = DLInt1(DLInt1ModelProps)
 
@@ -68,7 +68,8 @@ axs[1].set_xlabel('time (ms)')
 axs[1].set_ylabel('Vibration \nInput/JO\n Spikes')
 fig.tight_layout()
 fig.canvas.draw()
-fig.savefig(os.path.join(opDir, 'Traces.png'), dpi=150)
+plt.show()
+# fig.savefig(os.path.join(opDir, 'Traces.png'), dpi=150)
 
 
 

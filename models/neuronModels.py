@@ -187,7 +187,7 @@ def getSineInput(simDur: Quantity, simStepSize: Quantity,
     for start, dur in zip(sinPulseStarts, sinPulseDurs):
 
         timeMask = (simT >= start) & (simT <= start + dur)
-        sineInput[timeMask] = np.sin(2 * np.pi * freq * simT[timeMask])
+        sineInput[timeMask] = np.sin(2 * np.pi * freq * (simT[timeMask] - (0.5 / freq)))
 
     return sineInput
 
