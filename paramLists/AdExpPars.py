@@ -284,7 +284,21 @@ DLInt1Aynur = {
     "gL": 411.1 * nS,
     "C": 1 * nF,
     "a": 923.35 * nS,
-    "Vr": -40 * mV,
-    "Vt": -30.5 * mV,
+    "Vr": -50 * mV,
+    "Vt": -29 * mV,
+    "Vp": 0 * mV
+}
+
+DLInt2Try2 = {
+    "b": 1.85 * nA,
+    "V": -30*mV,
+    "sF": 6.7 * mV,
+    "tau": 0.8 * ms,
+    "EL": -30 * mV,
+    "gL": 411.1 * nS,
+    "C": 1 * nF,
+    "a": 411 * nS,
+    "Vr": -50 * mV,
+    "Vt": -25 * mV,
     "Vp": 0 * mV
 }

@@ -1,65 +1,100 @@
-from models.neuronModels import DLInt1, JOSpikes265, getSineInput
-from brian2 import defaultclock, units, TimedArray, SpikeGeneratorGroup, array
-from brian2.core.network import Network
-from matplotlib import pyplot as plt
-import seaborn as sns
-from mplPars import mplPars
-import DLInt1SynapsePropsList
-from dirDefs import homeFolder
-import inputParsList
 import os
-import shutil
+import sys
 
+import seaborn as sns
+from brian2 import defaultclock, units
+from matplotlib import pyplot as plt
+from brian2.core.network import Network
+from dirDefs import homeFolder
+from models.neuronModels import VSNeuron, JOSpikes265, getSineInput
+from models.neurons import AdExp
+from models.synapses import exp2Syn, exp2SynStateInits
+from mplPars import mplPars
+from paramLists import synapsePropsList, inputParsList, AdExpPars
 
 sns.set(style="whitegrid", rc=mplPars)
 
 
-# simStepSize = 0.5 * units.ms
-# simDuration = 200 * units.ms
+simSettleTime = 500 * units.ms
+
+simStepSize = 0.1 * units.ms
+simDuration = 100 * units.ms
 # inputParsName = 'onePulse'
 # inputParsName = 'twoPulse'
-# inputParsName = 'threePulse'
+inputParsName = 'threePulse'
 
 
-simStepSize = 0.5 * units.ms
-simDuration = 1200 * units.ms
-inputParsName = 'oneSecondPulse'
+# simStepSize = 0.5 * units.ms
+# simDuration = 1100 * units.ms
+# # inputParsName = 'oneSecondPulse'
+# # inputParsName = 'pulseTrainInt20Dur10'
+# inputParsName = 'pulseTrainInt20Dur16'
+# # inputParsName = 'pulseTrainInt33Dur10'
+# # inputParsName = 'pulseTrainInt33Dur16'
 
 DLInt1ModelProps = "DLInt1Aynur"
-DLInt1SynapseProps = 'DLInt1_syn_try2'
-dlint1 = DLInt1(DLInt1ModelProps)
+dlint1 = VSNeuron(**AdExp, inits=getattr(AdExpPars, DLInt1ModelProps), name='dlint1')
+dlint1.recordMembraneV()
+dlint1.recordSpikes()
+
+# DLInt1SynapsePropsE = 'DLInt1_syn_try2_e'
+DLInt1SynapsePropsE = ""
+DLInt1SynapsePropsI = 'DLInt1_syn_try2_i'
+# DLInt1SynapsePropsI = ""
+DLInt1SynapseProps = "-".join((DLInt1SynapsePropsE, DLInt1SynapsePropsI))
+
 
 opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
-if os.path.isdir(opDir):
-    ch = input('Results already exist at {}. Delete?(y/n):'.format(opDir))
+opFile = os.path.join(opDir, 'Traces.png')
+if os.path.isfile(opFile):
+    ch = input('Results already exist at {}. Delete?(y/n):'.format(opFile))
     if ch == 'y':
-        shutil.rmtree(opDir)
-os.makedirs(opDir)
+        os.remove(opFile)
+    else:
+        sys.exit('User Abort!')
 
-period265 = (1 / 265)
+elif not os.path.isdir(opDir):
+    os.makedirs(opDir)
+
 inputPars = getattr(inputParsList, inputParsName)
-JO = JOSpikes265(**inputPars)
-dlint1.addExp2Synapses(name='JO', nSyn=2, sourceNG=JO.JOSGG,
-                       sourceInd=0,
-                       **getattr(DLInt1SynapsePropsList, DLInt1SynapseProps))
+
+JO = JOSpikes265(nOutputs=1, simSettleTime=simSettleTime, **inputPars)
+
+
+if DLInt1SynapsePropsE:
+    dlint1.addSynapse(synName="ExiJO", sourceNG=JO.JOSGG, **exp2Syn,
+                      synParsInits=getattr(synapsePropsList, DLInt1SynapsePropsE),
+                      synStateInits=exp2SynStateInits,
+                      sourceInd=0, destInd=0
+                      )
+if DLInt1SynapsePropsI:
+    dlint1.addSynapse(synName="InhJO", sourceNG=JO.JOSGG, **exp2Syn,
+                      synParsInits=getattr(synapsePropsList, DLInt1SynapsePropsI),
+                      synStateInits=exp2SynStateInits,
+                      sourceInd=0, destInd=0
+                      )
+
 net = Network()
 net.add(JO.JOSGG)
 dlint1.addToNetwork(net)
 defaultclock.dt = simStepSize
-net.run(simDuration, report='text')
+totalSimDur = simDuration + simSettleTime
+net.run(totalSimDur, report='text')
 
 simT, memV = dlint1.getMemVTrace()
 spikeTimes = dlint1.getSpikes()
+
+
 fig, axs = plt.subplots(nrows=2, figsize=(10, 6.25), sharex='col')
 axs[0].plot(simT / units.ms, memV / units.mV)
 spikesY = memV.min() + 1.05 * (memV.max() - memV.min())
 axs[0].plot(spikeTimes / units.ms, [spikesY / units.mV] * spikeTimes.shape[0], 'k^')
 axs[0].set_ylabel('DLInt1 \nmemV (mV)')
-
+axs[0].set_xlim([simSettleTime / units.ms - 50, totalSimDur / units.ms + 50])
 sineInput = getSineInput(simDur=simDuration, simStepSize=simStepSize,
                          sinPulseDurs=inputPars['sinPulseDurs'],
                          sinPulseStarts=inputPars['sinPulseStarts'],
-                         freq=265 * units.Hz)
+                         freq=265 * units.Hz, simSettleTime=simSettleTime)
 axs[1].plot(simT / units.ms, sineInput, 'r-', label='Vibration Input')
 axs[1].plot(JO.spikeTimes / units.ms, [sineInput.max() * 1.05] * len(JO.spikeTimes), 'k^',
         label='JO Spikes')
@@ -68,8 +103,8 @@ axs[1].set_xlabel('time (ms)')
 axs[1].set_ylabel('Vibration \nInput/JO\n Spikes')
 fig.tight_layout()
 fig.canvas.draw()
-plt.show()
-# fig.savefig(os.path.join(opDir, 'Traces.png'), dpi=150)
+# plt.show()
+fig.savefig(opFile, dpi=150)
 
 
 
