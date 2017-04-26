@@ -15,30 +15,34 @@ from paramLists import synapsePropsList, inputParsList, AdExpPars
 sns.set(style="whitegrid", rc=mplPars)
 
 
-simSettleTime = 500 * units.ms
+simSettleTime = 650 * units.ms
 
 simStepSize = 0.1 * units.ms
-simDuration = 100 * units.ms
+simDuration = 150 * units.ms
 # inputParsName = 'onePulse'
 # inputParsName = 'twoPulse'
 inputParsName = 'threePulse'
+showBefore = 50 * units.ms
+showAfter = 50 * units.ms
 
 
-# simStepSize = 0.5 * units.ms
-# simDuration = 1100 * units.ms
-# # inputParsName = 'oneSecondPulse'
+# simStepSize = 0.1 * units.ms
+# simDuration = 1500 * units.ms
 # # inputParsName = 'pulseTrainInt20Dur10'
-# inputParsName = 'pulseTrainInt20Dur16'
+# # inputParsName = 'pulseTrainInt20Dur16'
 # # inputParsName = 'pulseTrainInt33Dur10'
 # # inputParsName = 'pulseTrainInt33Dur16'
+# inputParsName = 'oneSecondPulse'
+# showBefore = 500 * units.ms
+# showAfter = 500 * units.ms
 
 DLInt1ModelProps = "DLInt1Aynur"
 dlint1 = VSNeuron(**AdExp, inits=getattr(AdExpPars, DLInt1ModelProps), name='dlint1')
 dlint1.recordMembraneV()
 dlint1.recordSpikes()
 
-# DLInt1SynapsePropsE = 'DLInt1_syn_try2_e'
-DLInt1SynapsePropsE = ""
+DLInt1SynapsePropsE = 'DLInt1_syn_try2_e'
+# DLInt1SynapsePropsE = ""
 DLInt1SynapsePropsI = 'DLInt1_syn_try2_i'
 # DLInt1SynapsePropsI = ""
 DLInt1SynapseProps = "-".join((DLInt1SynapsePropsE, DLInt1SynapsePropsI))
@@ -90,7 +94,8 @@ axs[0].plot(simT / units.ms, memV / units.mV)
 spikesY = memV.min() + 1.05 * (memV.max() - memV.min())
 axs[0].plot(spikeTimes / units.ms, [spikesY / units.mV] * spikeTimes.shape[0], 'k^')
 axs[0].set_ylabel('DLInt1 \nmemV (mV)')
-axs[0].set_xlim([simSettleTime / units.ms - 50, totalSimDur / units.ms + 50])
+axs[0].set_xlim([(simSettleTime - showBefore) / units.ms,
+                 (totalSimDur + showAfter) / units.ms])
 sineInput = getSineInput(simDur=simDuration, simStepSize=simStepSize,
                          sinPulseDurs=inputPars['sinPulseDurs'],
                          sinPulseStarts=inputPars['sinPulseStarts'],
