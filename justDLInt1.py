@@ -15,13 +15,18 @@ from paramLists import synapsePropsList, inputParsList, AdExpPars
 sns.set(style="whitegrid", rc=mplPars)
 
 
-simSettleTime = 650 * units.ms
+simSettleTime = 710 * units.ms
 
 simStepSize = 0.1 * units.ms
 simDuration = 150 * units.ms
-# inputParsName = 'onePulse'
+inputParsName = 'onePulse'
 # inputParsName = 'twoPulse'
-inputParsName = 'threePulse'
+# inputParsName = 'threePulse'
+# inputParsName = "tenMSPulse"
+# inputParsName = "twentyMSPulse"
+# inputParsName = "thirtyMSPulse"
+# inputParsName = "fortyMSPulse"
+# inputParsName = "fiftyMSPulse"
 showBefore = 50 * units.ms
 showAfter = 50 * units.ms
 
@@ -30,9 +35,9 @@ showAfter = 50 * units.ms
 # simDuration = 1500 * units.ms
 # # inputParsName = 'pulseTrainInt20Dur10'
 # # inputParsName = 'pulseTrainInt20Dur16'
+# inputParsName = 'pulseTrainInt33Dur16'
 # # inputParsName = 'pulseTrainInt33Dur10'
-# # inputParsName = 'pulseTrainInt33Dur16'
-# inputParsName = 'oneSecondPulse'
+# # inputParsName = 'oneSecondPulse'
 # showBefore = 500 * units.ms
 # showAfter = 500 * units.ms
 

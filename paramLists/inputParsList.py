@@ -10,6 +10,20 @@ twoPulse = dict(sinPulseStarts=array([0]) * units.ms,
                 sinPulseDurs=array([1.9 * period265]) * units.second)
 threePulse = dict(sinPulseStarts=array([0]) * units.ms,
                 sinPulseDurs=array([2.9 * period265]) * units.second)
+
+tenMSPulse = dict(sinPulseStarts=array([0]) * units.ms,
+                sinPulseDurs=array([10]) * units.ms)
+twentyMSPulse = dict(sinPulseStarts=array([0]) * units.ms,
+                sinPulseDurs=array([20]) * units.ms)
+thirtyMSPulse = dict(sinPulseStarts=array([0]) * units.ms,
+                sinPulseDurs=array([30]) * units.ms)
+fortyMSPulse = dict(sinPulseStarts=array([0]) * units.ms,
+                sinPulseDurs=array([40]) * units.ms)
+fiftyMSPulse = dict(sinPulseStarts=array([0]) * units.ms,
+                sinPulseDurs=array([50]) * units.ms)
+
+
+
 oneSecondPulse = dict(sinPulseStarts=array([0]) * units.ms,
                 sinPulseDurs=array([1]) * units.second)
 
