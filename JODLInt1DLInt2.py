@@ -43,8 +43,8 @@ def runJODLInt1DLInt2(simStepSize: Quantity, simDuration: Quantity, simSettleTim
             ch = input('Results already exist at {}. Delete?(y/n):'.format(opFile))
             if ch == 'y':
                 os.remove(opFile)
-                if os.path.isfile(OPNixFile)
-                os.remove(OPNixFile)
+                if os.path.isfile(OPNixFile):
+                    os.remove(OPNixFile)
             else:
                 sys.exit('User Abort!')
 
@@ -53,7 +53,8 @@ def runJODLInt1DLInt2(simStepSize: Quantity, simDuration: Quantity, simSettleTim
     else:
         if os.path.isfile(opFile):
             os.remove(opFile)
-            os.remove(OPNixFile)
+            if os.path.isfile(OPNixFile):
+                os.remove(OPNixFile)
 
         elif not os.path.isdir(opDir):
             os.makedirs(opDir)
@@ -153,8 +154,14 @@ def runJODLInt1DLInt2(simStepSize: Quantity, simDuration: Quantity, simSettleTim
                                 t_start=0 * qu.mV,
                                 units="mV",
                                 name="DLInt2 MemV")
+    inputAS = AnalogSignal(signal=sineInput,
+                                sampling_period=(simStepSize / units.ms) * qu.ms,
+                                t_start=0 * qu.mV,
+                                units="um",
+                                name="Input Vibration Signal")
     dlint1SpikesQU = (DLInt1_spikeTimes / units.ms) * qu.ms
     dlint2SpikesQU = (DLInt2_spikeTimes / units.ms) * qu.ms
+    joSpikesQU = (JO.spikeTimes / units.ms) * qu.ms
 
     nixFile = nixio.File.open(OPNixFile, mode=nixio.FileMode.ReadWrite)
 
@@ -193,8 +200,9 @@ def runJODLInt1DLInt2(simStepSize: Quantity, simDuration: Quantity, simSettleTim
 
         for propName, propVal in JODLInt1SynEDict.items():
             addBrianQuantity2Section(JODLInt1SynESec, propName, propVal)
-            JODLInt1SynESec.create_property("PreSynaptic Neuron", nixio.Value("JO"))
-            JODLInt1SynESec.create_property("PostSynaptic Neuron", nixio.Value("DLInt1"))
+
+        JODLInt1SynESec.create_property("PreSynaptic Neuron", nixio.Value("JO"))
+        JODLInt1SynESec.create_property("PostSynaptic Neuron", nixio.Value("DLInt1"))
 
 
     if DLInt1SynapsePropsI:
@@ -204,8 +212,8 @@ def runJODLInt1DLInt2(simStepSize: Quantity, simDuration: Quantity, simSettleTim
 
         for propName, propVal in JODLInt1SynIDict.items():
             addBrianQuantity2Section(JODLInt1SynISec, propName, propVal)
-            JODLInt1SynISec.create_property("PreSynaptic Neuron", nixio.Value("JO"))
-            JODLInt1SynISec.create_property("PostSynaptic Neuron", nixio.Value("DLInt1"))
+        JODLInt1SynISec.create_property("PreSynaptic Neuron", nixio.Value("JO"))
+        JODLInt1SynISec.create_property("PostSynaptic Neuron", nixio.Value("DLInt1"))
 
     if DLInt2SynapseProps:
 
@@ -214,8 +222,8 @@ def runJODLInt1DLInt2(simStepSize: Quantity, simDuration: Quantity, simSettleTim
 
         for propName, propVal in JODLInt2SynEDict.items():
             addBrianQuantity2Section(JODLInt2SynESec, propName, propVal)
-            JODLInt2SynESec.create_property("PreSynaptic Neuron", nixio.Value("JO"))
-            JODLInt2SynESec.create_property("PostSynaptic Neuron", nixio.Value("DLInt2"))
+        JODLInt2SynESec.create_property("PreSynaptic Neuron", nixio.Value("JO"))
+        JODLInt2SynESec.create_property("PostSynaptic Neuron", nixio.Value("DLInt2"))
 
     if DLInt1DLInt2SynProps:
 
@@ -224,17 +232,21 @@ def runJODLInt1DLInt2(simStepSize: Quantity, simDuration: Quantity, simSettleTim
 
         for propName, propVal in DLInt1DLInt2SynDict.items():
             addBrianQuantity2Section(DLInt1DLInt2SynSec, propName, propVal)
-            DLInt1DLInt2SynSec.create_property("PreSynaptic Neuron", nixio.Value("DLInt1"))
-            DLInt1DLInt2SynSec.create_property("PostSynaptic Neuron", nixio.Value("DLInt2"))
+        DLInt1DLInt2SynSec.create_property("PreSynaptic Neuron", nixio.Value("DLInt1"))
+        DLInt1DLInt2SynSec.create_property("PostSynaptic Neuron", nixio.Value("DLInt2"))
 
 
     blk = nixFile.create_block("Simulation Traces", "Brian Output")
     DLInt1DA = addAnalogSignal2Block(blk, dlint1MemVAS)
     DLInt2DA = addAnalogSignal2Block(blk, dlint2MemVAS)
+    inputDA = addAnalogSignal2Block(blk, inputAS)
     addMultiTag("DLInt1 Spikes", type="Spikes", positions=dlint1SpikesQU,
                 blk=blk, refs=[DLInt1DA])
     addMultiTag("DLInt2 Spikes", type="Spikes", positions=dlint2SpikesQU,
                 blk=blk, refs=[DLInt2DA])
+    addMultiTag("JO Spikes", type="Spikes", positions=joSpikesQU,
+                blk=blk, refs=[inputDA])
+
 
     nixFile.close()
 

@@ -47,3 +47,13 @@ pulseTrainInt33Dur10 = getPulseTrainInputPars(pulseDur=10*units.ms, pulseInt=33*
                                               stimDur=1*units.second)
 pulseTrainInt33Dur16 = getPulseTrainInputPars(pulseDur=16*units.ms, pulseInt=33*units.ms,
                                               stimDur=1*units.second)
+pulseTrainInt50Dur10 = getPulseTrainInputPars(pulseDur=10*units.ms, pulseInt=50*units.ms,
+                                              stimDur=1*units.second)
+pulseTrainInt50Dur16 = getPulseTrainInputPars(pulseDur=16*units.ms, pulseInt=50*units.ms,
+                                              stimDur=1*units.second)
+pulseTrainInt50Dur20 = getPulseTrainInputPars(pulseDur=20*units.ms, pulseInt=50*units.ms,
+                                              stimDur=1*units.second)
+pulseTrainInt50Dur30 = getPulseTrainInputPars(pulseDur=30*units.ms, pulseInt=50*units.ms,
+                                              stimDur=1*units.second)
+
+

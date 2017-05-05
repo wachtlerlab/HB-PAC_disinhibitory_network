@@ -37,18 +37,22 @@ showAfter = 50 * units.ms
 # showAfter = 500 * units.ms
 
 DLInt1ModelProps = "DLInt1Aynur"
-dlint1 = VSNeuron(**AdExp, inits=getattr(AdExpPars, DLInt1ModelProps), name='dlint1')
-dlint1.recordMembraneV()
-dlint1.recordSpikes()
 
 DLInt1SynapsePropsE = 'DLInt1_syn_try2_e'
 # DLInt1SynapsePropsE = ""
 DLInt1SynapsePropsI = 'DLInt1_syn_try2_i'
 # DLInt1SynapsePropsI = ""
-DLInt1SynapseProps = "-".join((DLInt1SynapsePropsE, DLInt1SynapsePropsI))
+DLInt1SynapseProps = "".join((DLInt1SynapsePropsE, DLInt1SynapsePropsI))
 
+DLInt2ModelProps = "DLInt2Try2"
 
-opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
+DLInt2SynapseProps = 'DLInt2_syn_try2'
+
+DLInt1DLInt2SynProps = "DLInt1_DLInt2_try1"
+
+opDir = os.path.join(homeFolder, DLInt1ModelProps + DLInt2ModelProps,
+                         DLInt1SynapseProps + DLInt2SynapseProps + DLInt1DLInt2SynProps,
+                         inputParsName)
 opFile = os.path.join(opDir, 'SynCurrentTraces.png')
 if os.path.isfile(opFile):
     ch = input('Results already exist at {}. Delete?(y/n):'.format(opFile))
@@ -62,51 +66,79 @@ elif not os.path.isdir(opDir):
 
 inputPars = getattr(inputParsList, inputParsName)
 
-JO = JOSpikes265(nOutputs=1, simSettleTime=simSettleTime, **inputPars)
-
-
-if DLInt1SynapsePropsE:
-    synPropsE = getattr(synapsePropsList, DLInt1SynapsePropsE)
-    dlint1.addSynapse(synName="ExiJO", sourceNG=JO.JOSGG, **exp2Syn,
-                      synParsInits=synPropsE,
-                      synStateInits=exp2SynStateInits,
-                      sourceInd=0, destInd=0
-                      )
-
-if DLInt1SynapsePropsI:
-    synPropsI = getattr(synapsePropsList, DLInt1SynapsePropsI)
-    dlint1.addSynapse(synName="InhJO", sourceNG=JO.JOSGG, **exp2Syn,
-                      synParsInits=synPropsI,
-                      synStateInits=exp2SynStateInits,
-                      sourceInd=0, destInd=0
-                      )
 
 net = Network()
+JO = JOSpikes265(nOutputs=1, simSettleTime=simSettleTime, **inputPars)
 net.add(JO.JOSGG)
-dlint1.addToNetwork(net)
+
+DLInt1PropsDict = getattr(AdExpPars, DLInt1ModelProps)
+dlint1 = VSNeuron(**AdExp, inits=DLInt1PropsDict, name='dlint1')
+dlint1.recordSpikes()
+dlint1.recordMembraneV()
 
 if DLInt1SynapsePropsE:
-    gEMonitor = StateMonitor(dlint1.incomingSynapses["ExiJO"], "g_ExiJO", record=True)
+    dlint1.addSynapse(synName="ExiJO", sourceNG=JO.JOSGG, **exp2Syn,
+                          synParsInits=getattr(synapsePropsList, DLInt1SynapsePropsE),
+                          synStateInits=exp2SynStateInits,
+                          sourceInd=0, destInd=0
+                          )
+if DLInt1SynapsePropsI:
+    dlint1.addSynapse(synName="InhJO", sourceNG=JO.JOSGG, **exp2Syn,
+                          synParsInits=getattr(synapsePropsList, DLInt1SynapsePropsI),
+                          synStateInits=exp2SynStateInits,
+                          sourceInd=0, destInd=0
+                          )
+
+dlint1.addToNetwork(net)
+
+DLInt2PropsDict = getattr(AdExpPars, DLInt2ModelProps)
+dlint2 = VSNeuron(**AdExp, inits=DLInt2PropsDict, name='dlint2')
+dlint2.recordMembraneV()
+dlint2.recordSpikes()
+
+if DLInt2SynapseProps:
+    synPropsE = getattr(synapsePropsList, DLInt2SynapseProps)
+    dlint2.addSynapse(synName="ExiJO", sourceNG=JO.JOSGG, **exp2Syn,
+                          synParsInits=synPropsE,
+                          synStateInits=exp2SynStateInits,
+                          sourceInd=0, destInd=0
+                          )
+
+if DLInt1DLInt2SynProps:
+    synPropsI = getattr(synapsePropsList, DLInt1DLInt2SynProps)
+    dlint2.addSynapse(synName="DLInt1", sourceNG=dlint1.ng, **exp2Syn,
+                          synParsInits=synPropsI,
+                          synStateInits=exp2SynStateInits,
+                          sourceInd=0, destInd=0
+                          )
+
+
+dlint2.addToNetwork(net)
+
+if DLInt2SynapseProps:
+    gEMonitor = StateMonitor(dlint2.incomingSynapses["ExiJO"], "g_ExiJO", record=True)
     net.add(gEMonitor)
 
-if DLInt1SynapsePropsI:
-    gIMonitor = StateMonitor(dlint1.incomingSynapses["InhJO"], "g_InhJO", record=True)
+if DLInt1DLInt2SynProps:
+    gIMonitor = StateMonitor(dlint2.incomingSynapses["DLInt1"], "g_DLInt1", record=True)
     net.add(gIMonitor)
+
+
 
 
 defaultclock.dt = simStepSize
 totalSimDur = simDuration + simSettleTime
 net.run(totalSimDur, report='text')
 
-simT, memV = dlint1.getMemVTrace()
-spikeTimes = dlint1.getSpikes()
+simT, memV = dlint2.getMemVTrace()
+spikeTimes = dlint2.getSpikes()
 
 
 fig, axs = plt.subplots(nrows=3, figsize=(10, 6.25), sharex='col')
 axs[0].plot(simT / units.ms, memV / units.mV)
 spikesY = memV.min() + 1.05 * (memV.max() - memV.min())
 axs[0].plot(spikeTimes / units.ms, [spikesY / units.mV] * spikeTimes.shape[0], 'k^')
-axs[0].set_ylabel('DLInt1\nMembrane\nPotential\n(mV)')
+axs[0].set_ylabel('DLInt2\nMembrane\nPotential\n(mV)')
 axs[0].set_xlim([(simSettleTime - showBefore) / units.ms,
                      (totalSimDur + showAfter) / units.ms])
 sineInput = getSineInput(simDur=simDuration, simStepSize=simStepSize,
@@ -118,13 +150,13 @@ if DLInt1SynapsePropsE:
     gSynE = gEMonitor.g_ExiJO[0]
     iSynE = -gSynE * (memV - synPropsE['Esyn'])
     axs[1].plot(simT / units.ms,
-                iSynE / units.nA, 'r-', label=r'$I_{synE}$')
+                iSynE / units.nA, 'm-', label=r'$I_{synE}$')
 
 if DLInt1SynapsePropsI:
-    gSynI = gIMonitor.g_InhJO[0]
+    gSynI = gIMonitor.g_DLInt1[0]
     iSynI = -gSynI * (memV - synPropsI['Esyn'])
     axs[1].plot(simT / units.ms,
-                iSynI / units.nA, 'g-', label=r'$I_{synI}$')
+                iSynI / units.nA, 'c-', label=r'$I_{synI}$')
 
 axs[1].legend(loc='upper right')
 axs[1].set_ylabel("Synaptic\ncurrents\n(nA)")

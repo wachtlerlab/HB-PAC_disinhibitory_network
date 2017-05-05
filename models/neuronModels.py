@@ -250,8 +250,9 @@ class JOSpikes265(object):
                 self.spikeTimes += (simSettleTimeF + cycleStarts + phaseDelayF).tolist()
                 self.spikeInds += [i] * len(cycleStarts)
 
+        self.spikeTimes = self.spikeTimes * units.second
         self.JOSGG = SpikeGeneratorGroup(nOutputs, array(self.spikeInds),
-                                         array(self.spikeTimes) * units.second)
+                                         self.spikeTimes)
 
 def getSineInput(simDur: Quantity, simStepSize: Quantity,
                  sinPulseStarts: Quantity, sinPulseDurs: Quantity,
