@@ -52,7 +52,7 @@ def dataArray2AnalogSignal(dataArray):
     t_start = qu.Quantity(dim.offset, units=dim.unit)
     samplingPeriod = qu.Quantity(dim.sampling_interval, units=dim.unit)
 
-    analogSignal = neo.AnalogSignal(signal=dataArray[:],
+    analogSignal = neo.AnalogSignal(signal=np.array(dataArray[:]),
                                     units=dataArray.unit,
                                     sampling_period=samplingPeriod,
                                     t_start=t_start)
@@ -281,11 +281,11 @@ def simpleFloat(quant):
 
         if quant.shape[0]:
 
-            return tuple(float(q.simplified) for q in quant)
+            return quant.simplified.magnitude.tolist()
 
         else:
 
-            return ()
+            return []
 
     else:
 
