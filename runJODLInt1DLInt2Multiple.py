@@ -2,7 +2,7 @@ from JODLInt1DLInt2 import runJODLInt1DLInt2
 from brian2 import units
 
 simSettleTime = 710 * units.ms
-
+#
 # simStepSize = 0.1 * units.ms
 # simDuration = 150 * units.ms
 # inputParsNames = [
@@ -15,7 +15,6 @@ simSettleTime = 710 * units.ms
 #     "fortyMSPulse",
 #     "fiftyMSPulse",
 # ]
-#
 # showBefore = 50 * units.ms
 # showAfter = 50 * units.ms
 
@@ -32,7 +31,6 @@ inputParsNames = [
     'pulseTrainInt50Dur20',
     'pulseTrainInt50Dur30',
 ]
-
 showBefore = 500 * units.ms
 showAfter = 500 * units.ms
 

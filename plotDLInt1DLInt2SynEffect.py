@@ -3,15 +3,19 @@ from matplotlib import pyplot as plt
 from brian2 import units
 from dirDefs import homeFolder
 import os
-from neoNIXIO import dataArray2AnalogSignal, multiTag2SpikeTrain
+from neoNIXIO import dataArray2AnalogSignal, multiTag2SpikeTrain, simpleFloat
 from mplPars import mplPars
 import seaborn as sns
+import quantities as qu
 
 sns.set(rc=mplPars)
 sns.axes_style('whitegrid')
 
+simSettleTime = 710 * units.ms
+
 simStepSize = 0.5 * units.ms
 simDuration = 1500 * units.ms
+totalSimDur = simSettleTime + simDuration
 IntDurs = [
     (20, 10),
     (20, 16),
@@ -25,8 +29,8 @@ IntDurs = [
 pulseInts = sorted(set([x[0] for x in IntDurs]))
 pulseDurs = sorted(set([x[1] for x in IntDurs]))
 
-showBefore = 500 * units.ms
-showAfter = 500 * units.ms
+showBefore = 200 * units.ms
+showAfter = -300 * units.ms
 
 DLInt1ModelProps = "DLInt1Aynur"
 
@@ -48,8 +52,15 @@ DLInt2SynapseProps = 'DLInt2_syn_try2'
 DLInt1DLInt2SynProps = "DLInt1_DLInt2_try1"
 # DLInt1DLInt2SynProps = ""
 
-fig1, axs1 = plt.subplots(nrows=len(pulseDurs), ncols=len(pulseInts), figsize=(14, 11.2))
-fig2, axs2 = plt.subplots(nrows=len(pulseDurs), ncols=len(pulseInts), figsize=(14, 11.2))
+DLInt1SynapseProps = "".join((DLInt1SynapsePropsE, DLInt1SynapsePropsI))
+
+opDir = os.path.join(homeFolder, DLInt1ModelProps + DLInt2ModelProps,
+                     DLInt1SynapseProps + DLInt2SynapseProps + DLInt1DLInt2SynProps)
+
+fig1, axs1 = plt.subplots(nrows=len(pulseDurs), ncols=len(pulseInts),
+                          figsize=(14, 11.2), sharex='all', sharey='all')
+fig2, axs2 = plt.subplots(nrows=len(pulseDurs), ncols=len(pulseInts),
+                          figsize=(14, 11.2), sharex='all', sharey="all")
 
 for IntDur in IntDurs:
 
@@ -94,17 +105,38 @@ for IntDur in IntDurs:
     rowInd = pulseDurs.index(pulseDur)
     colInd = pulseInts.index(pulseInt)
 
-    axs1[rowInd, colInd].plot(dlint1MemVAS.times, dlint1MemVAS, 'b-')
-    spikesY = dlint1MemVAS.min() + 1.05 * (dlint1MemVAS.max() - dlint1MemVAS.min())
-    axs1[rowInd, colInd].plot(dlint1SpikesST.times, [spikesY] * dlint1SpikesST.shape[0], 'b^')
+    axs1[rowInd, colInd].plot(simpleFloat(dlint1MemVAS.times / qu.ms),
+                              simpleFloat(dlint1MemVAS / qu.mV), 'b-')
+    axs1[rowInd, colInd].plot(simpleFloat(dlint1SpikesST.times / qu.ms),
+                              [4] * dlint1SpikesST.shape[0],
+                              'b|', ms=8, mew=1)
+    # mew needs setting for seaborn. https://github.com/mwaskom/seaborn/issues/644
+    axs1[rowInd, colInd].set_xlim([(simSettleTime - showBefore) / units.ms,
+                                   (totalSimDur + showAfter) / units.ms])
 
-    axs2[rowInd, colInd].plot(dlint2MemVAS.times, dlint2MemVAS, 'b-')
-    axs2[rowInd, colInd].plot(dlint2MemVASWithout.times, dlint2MemVASWithout, 'r-')
-    spikesY = dlint2MemVAS.min() + 1.05 * (dlint2MemVAS.max() - dlint2MemVAS.min())
-    axs2[rowInd, colInd].plot(dlint2SpikesST.times, [spikesY] * dlint2SpikesST.shape[0], 'b^')
-    spikesY = dlint2MemVAS.min() + 1.10 * (dlint2MemVAS.max() - dlint2MemVAS.min())
-    axs2[rowInd, colInd].plot(dlint2SpikesSTWithout.times,
-                              [spikesY] * dlint2SpikesSTWithout.shape[0], 'r^')
+
+    axs2[rowInd, colInd].plot(simpleFloat(dlint2MemVAS.times / qu.ms),
+                              simpleFloat(dlint2MemVAS / qu.mV), 'b-')
+    axs2[rowInd, colInd].plot(simpleFloat(dlint2MemVASWithout.times / qu.ms),
+                              simpleFloat(dlint2MemVASWithout / qu.mV), 'r-')
+    axs2[rowInd, colInd].plot(simpleFloat(dlint2SpikesST.times / qu.ms),
+                              [4] * dlint2SpikesST.shape[0],
+                            'b|', ms=8, mew=1)
+    axs2[rowInd, colInd].plot(simpleFloat(dlint2SpikesSTWithout.times / qu.ms),
+                              [8] * dlint2SpikesSTWithout.shape[0],
+                              'r|', ms=8, mew=1)
+    axs2[rowInd, colInd].set_xlim([(simSettleTime - showBefore) / units.ms,
+                                   (totalSimDur + showAfter) / units.ms])
+    axs2[rowInd, colInd].set_ylim([-40, 10])
+    axs2[rowInd, colInd].yaxis.tick_right()
+
+for ax in axs1.flat:
+    ax.set_ylim([-40, 10])
+    ax.yaxis.tick_right()
+
+for ax in axs2.flat:
+    ax.set_ylim([-40, 10])
+    ax.yaxis.tick_right()
 
 for ind, val in enumerate(pulseInts):
 
@@ -119,8 +151,8 @@ for ind, val in enumerate(pulseDurs):
 
 fig1.tight_layout()
 fig2.tight_layout()
-fig1.savefig(os.path.join(homeFolder, 'DLInt1Summary.png'), dpi=150)
-fig2.savefig(os.path.join(homeFolder, 'DLInt2Summary.png'), dpi=150)
+fig1.savefig(os.path.join(opDir, 'DLInt1Summary.png'), dpi=150)
+fig2.savefig(os.path.join(opDir, 'DLInt2Summary.png'), dpi=150)
 
 
 
