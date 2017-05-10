@@ -15,31 +15,34 @@ from paramLists import synapsePropsList, inputParsList, AdExpPars
 sns.set(style="whitegrid", rc=mplPars)
 
 
-simSettleTime = 710 * units.ms
-
-simStepSize = 0.1 * units.ms
-simDuration = 150 * units.ms
-inputParsName = 'onePulse'
-# inputParsName = 'twoPulse'
-# inputParsName = 'threePulse'
-# inputParsName = "tenMSPulse"
-# inputParsName = "twentyMSPulse"
-# inputParsName = "thirtyMSPulse"
-# inputParsName = "fortyMSPulse"
-# inputParsName = "fiftyMSPulse"
-showBefore = 50 * units.ms
-showAfter = 50 * units.ms
-
+simSettleTime = 600 * units.ms
 
 # simStepSize = 0.1 * units.ms
-# simDuration = 1500 * units.ms
-# # inputParsName = 'pulseTrainInt20Dur10'
-# # inputParsName = 'pulseTrainInt20Dur16'
+# simDuration = 150 * units.ms
+# # inputParsName = 'onePulse'
+# # inputParsName = 'twoPulse'
+# # inputParsName = 'threePulse'
+# # inputParsName = "tenMSPulse"
+# # inputParsName = "twentyMSPulse"
+# # inputParsName = "thirtyMSPulse"
+# inputParsName = "fortyMSPulse"
+# # inputParsName = "fiftyMSPulse"
+# showBefore = 50 * units.ms
+# showAfter = 10 * units.ms
+
+
+simStepSize = 0.1 * units.ms
+simDuration = 1500 * units.ms
+# inputParsName = 'pulseTrainInt20Dur10'
+# inputParsName = 'pulseTrainInt20Dur16'
 # inputParsName = 'pulseTrainInt33Dur16'
-# # inputParsName = 'pulseTrainInt33Dur10'
-# # inputParsName = 'oneSecondPulse'
-# showBefore = 500 * units.ms
-# showAfter = 500 * units.ms
+# inputParsName = 'pulseTrainInt33Dur10'
+# inputParsName = 'oneSecondPulse'
+# inputParsName = 'pulseTrainInt50Dur10'
+inputParsName = 'pulseTrainInt50Dur16'
+# inputParsName = 'pulseTrainInt50Dur20'
+showBefore = 500 * units.ms
+showAfter = 500 * units.ms
 
 DLInt1ModelProps = "DLInt1Aynur"
 dlint1 = VSNeuron(**AdExp, inits=getattr(AdExpPars, DLInt1ModelProps), name='dlint1')
@@ -53,7 +56,9 @@ DLInt1SynapsePropsI = 'DLInt1_syn_try2_i'
 DLInt1SynapseProps = "-".join((DLInt1SynapsePropsE, DLInt1SynapsePropsI))
 
 
-opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
+# opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
+opDir = "/tmp/justDLInt1"
+
 opFile = os.path.join(opDir, 'Traces.png')
 if os.path.isfile(opFile):
     ch = input('Results already exist at {}. Delete?(y/n):'.format(opFile))
@@ -115,6 +120,7 @@ fig.tight_layout()
 fig.canvas.draw()
 # plt.show()
 fig.savefig(opFile, dpi=150)
+
 
 
 

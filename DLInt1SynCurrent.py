@@ -22,7 +22,7 @@ from brianUtils import addBrianQuantity2Section
 sns.set(style="whitegrid", rc=mplPars)
 
 
-simSettleTime = 710 * units.ms
+simSettleTime = 600 * units.ms
 
 simStepSize = 0.1 * units.ms
 simDuration = 150 * units.ms
@@ -30,7 +30,7 @@ simDuration = 150 * units.ms
 # inputParsName = 'twoPulse'
 # inputParsName = 'threePulse'
 inputParsName = "fortyMSPulse"
-showBefore = 50 * units.ms
+showBefore = 300 * units.ms
 showAfter = 50 * units.ms
 
 # simStepSize = 0.1 * units.ms
@@ -56,7 +56,9 @@ DLInt1SynapsePropsI = 'DLInt1_syn_try2_i'
 DLInt1SynapseProps = "-".join((DLInt1SynapsePropsE, DLInt1SynapsePropsI))
 
 
-opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
+# opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
+opDir = "/tmp/justDLInt1"
+
 opFile = os.path.join(opDir, 'SynCurrentTraces.png')
 OPNixFile = os.path.join(opDir, 'simResWithSynCurrents.h5')
 if os.path.isfile(opFile):

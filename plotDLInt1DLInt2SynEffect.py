@@ -11,9 +11,9 @@ import quantities as qu
 sns.set(rc=mplPars)
 sns.axes_style('whitegrid')
 
-simSettleTime = 710 * units.ms
+simSettleTime = 600 * units.ms
 
-simStepSize = 0.5 * units.ms
+simStepSize = 0.1 * units.ms
 simDuration = 1500 * units.ms
 totalSimDur = simSettleTime + simDuration
 IntDurs = [
