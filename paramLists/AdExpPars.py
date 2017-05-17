@@ -290,15 +290,15 @@ DLInt1Aynur = {
 }
 
 DLInt2Try2 = {
-    "b": 0.5 * nA,
+    "b": 1 * nA,
     "V": -30 * mV,
     "sF": 6 * mV,
-    "tau": 2.5 * ms,
+    "tau": 0.08 * ms,
     "EL": -30 * mV,
-    "gL": 666.67 * nS,
-    "C": 5 * nF,
-    "a": 1333 * nS,
-    "Vr": -32 * mV,
-    "Vt": -28.5 * mV,
+    "gL": 500 * nS,
+    "C": 0.125 * nF,
+    "a": 500 * nS,
+    "Vr": -31 * mV,
+    "Vt": -27.5 * mV,
     "Vp": 0 * mV
 }

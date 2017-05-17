@@ -107,10 +107,13 @@ for IntDur in IntDurs:
 
     axs1[rowInd, colInd].plot(simpleFloat(dlint1MemVAS.times / qu.ms),
                               simpleFloat(dlint1MemVAS / qu.mV), 'b-')
+    # mew needs setting for seaborn. https://github.com/mwaskom/seaborn/issues/644
     axs1[rowInd, colInd].plot(simpleFloat(dlint1SpikesST.times / qu.ms),
                               [4] * dlint1SpikesST.shape[0],
                               'b|', ms=8, mew=1)
-    # mew needs setting for seaborn. https://github.com/mwaskom/seaborn/issues/644
+    axs1[rowInd, colInd].plot(simpleFloat(sinInputAS.times / qu.ms),
+                              simpleFloat(((5 * qu.um * sinInputAS) - 50 * qu.um) / qu.um)
+                              , 'k-')
     axs1[rowInd, colInd].set_xlim([(simSettleTime - showBefore) / units.ms,
                                    (totalSimDur + showAfter) / units.ms])
 
@@ -125,17 +128,19 @@ for IntDur in IntDurs:
     axs2[rowInd, colInd].plot(simpleFloat(dlint2SpikesSTWithout.times / qu.ms),
                               [8] * dlint2SpikesSTWithout.shape[0],
                               'r|', ms=8, mew=1)
+    axs2[rowInd, colInd].plot(simpleFloat(sinInputAS.times / qu.ms),
+                              simpleFloat(((5 * qu.um * sinInputAS) - 50 * qu.um) / qu.um)
+                              , 'k-')
     axs2[rowInd, colInd].set_xlim([(simSettleTime - showBefore) / units.ms,
                                    (totalSimDur + showAfter) / units.ms])
-    axs2[rowInd, colInd].set_ylim([-40, 10])
-    axs2[rowInd, colInd].yaxis.tick_right()
+
 
 for ax in axs1.flat:
-    ax.set_ylim([-40, 10])
+    ax.set_ylim([-60, 10])
     ax.yaxis.tick_right()
 
 for ax in axs2.flat:
-    ax.set_ylim([-40, 10])
+    ax.set_ylim([-60, 10])
     ax.yaxis.tick_right()
 
 for ind, val in enumerate(pulseInts):

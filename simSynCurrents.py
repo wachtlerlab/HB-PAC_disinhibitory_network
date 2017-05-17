@@ -21,7 +21,7 @@ from brianUtils import addBrianQuantity2Section
 sns.set(style="whitegrid", rc=mplPars)
 
 
-simSettleTime = 710 * units.ms
+simSettleTime = 600 * units.ms
 
 simStepSize = 0.1 * units.ms
 simDuration = 150 * units.ms

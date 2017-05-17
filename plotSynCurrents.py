@@ -11,7 +11,7 @@ import quantities as qu
 sns.set(style="whitegrid", rc=mplPars)
 
 
-simSettleTime = 710 * units.ms
+simSettleTime = 600 * units.ms
 
 simStepSize = 0.1 * units.ms
 simDuration = 150 * units.ms
@@ -78,7 +78,7 @@ dlint1SpikesST = multiTag2SpikeTrain(dlint1SpikesMT, sinInputAS.t_start, sinInpu
 dlint2SpikesST = multiTag2SpikeTrain(dlint2SpikesMT, sinInputAS.t_start, sinInputAS.t_stop)
 joSpikesST = multiTag2SpikeTrain(joSpikesMT, sinInputAS.t_start, sinInputAS.t_stop)
 
-fig1, ax1 = plt.subplots(nrows=2, figsize=(14, 11.2), sharex='col')
+fig1, ax1 = plt.subplots(nrows=2, figsize=(7, 5.6), sharex='col')
 ax1[0].plot(simpleFloat(dlint1MemVAS.times / qu.ms),
             simpleFloat(dlint1MemVAS / qu.mV), 'b-')
 markerline, stemlines, baseline \
@@ -106,7 +106,7 @@ ax1[1].set_xlim([(simSettleTime - showBefore) / units.ms,
                      (totalSimDur + showAfter) / units.ms])
 ax1[1].axis('off')
 
-fig2, ax2 = plt.subplots(nrows=2, figsize=(14, 11.2), sharex='col')
+fig2, ax2 = plt.subplots(nrows=2, figsize=(7, 5.6), sharex='col')
 ax2[0].plot(simpleFloat(dlint2MemVAS.times / qu.ms),
             simpleFloat(dlint2MemVAS / qu.mV), 'b-')
 markerline, stemlines, baseline \
@@ -134,7 +134,7 @@ ax2[1].set_xlim([(simSettleTime - showBefore) / units.ms,
                      (totalSimDur + showAfter) / units.ms])
 ax2[1].axis('off')
 
-fig3, ax3 = plt.subplots(figsize=(14, 11.2))
+fig3, ax3 = plt.subplots(figsize=(7, 5.6))
 ax3.plot(simpleFloat(sinInputAS.times / qu.ms),
          sinInputAS, 'k-')
 

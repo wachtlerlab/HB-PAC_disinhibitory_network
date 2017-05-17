@@ -19,12 +19,12 @@ DLInt1_syn_try2_i = dict(wSyn=160 * units.nsiemens,
                     tau1=12 * units.ms, tau2=15 * units.ms,
                     delay=10 * units.ms)
 
-DLInt2_syn_try2 = dict(wSyn=400 * units.nsiemens,
+DLInt2_syn_try2 = dict(wSyn=80 * units.nsiemens,
                     Esyn=0 * units.mvolt,
-                    tau1=0.5 * units.ms, tau2=4 * units.ms,
+                    tau1=0.5 * units.ms, tau2=2 * units.ms,
                     delay=5 * units.ms)
 
-DLInt1_DLInt2_try1 = dict(wSyn=12000 * units.nsiemens,
+DLInt1_DLInt2_try1 = dict(wSyn=180 * units.nsiemens,
                     Esyn=-80 * units.mvolt,
-                    tau1=4.8 * units.ms, tau2=5 * units.ms,
+                    tau1=12 * units.ms, tau2=15 * units.ms,
                     delay=3 * units.ms)
