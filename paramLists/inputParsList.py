@@ -55,5 +55,8 @@ pulseTrainInt50Dur20 = getPulseTrainInputPars(pulseDur=20*units.ms, pulseInt=50*
                                               stimDur=1*units.second)
 pulseTrainInt50Dur30 = getPulseTrainInputPars(pulseDur=30*units.ms, pulseInt=50*units.ms,
                                               stimDur=1*units.second)
-
+pTShortInt33Dur16 = getPulseTrainInputPars(pulseDur=16 * units.ms, pulseInt=33 * units.ms,
+                                           stimDur=250 * units.ms)
+pTShortInt50Dur16 = getPulseTrainInputPars(pulseDur=16 * units.ms, pulseInt=50 * units.ms,
+                                           stimDur=250 * units.ms)
 
