@@ -55,8 +55,25 @@ pulseTrainInt50Dur20 = getPulseTrainInputPars(pulseDur=20*units.ms, pulseInt=50*
                                               stimDur=1*units.second)
 pulseTrainInt50Dur30 = getPulseTrainInputPars(pulseDur=30*units.ms, pulseInt=50*units.ms,
                                               stimDur=1*units.second)
+pTShortInt20Dur10 = getPulseTrainInputPars(pulseDur=10 * units.ms, pulseInt=20 * units.ms,
+                                           stimDur=250 * units.ms)
+pTShortInt20Dur16 = getPulseTrainInputPars(pulseDur=16 * units.ms, pulseInt=20 * units.ms,
+                                           stimDur=250 * units.ms)
+pTShortInt33Dur10 = getPulseTrainInputPars(pulseDur=10 * units.ms, pulseInt=33 * units.ms,
+                                           stimDur=250 * units.ms)
 pTShortInt33Dur16 = getPulseTrainInputPars(pulseDur=16 * units.ms, pulseInt=33 * units.ms,
+                                           stimDur=250 * units.ms)
+pTShortInt33Dur20 = getPulseTrainInputPars(pulseDur=20 * units.ms, pulseInt=33 * units.ms,
+                                           stimDur=250 * units.ms)
+pTShortInt50Dur10 = getPulseTrainInputPars(pulseDur=10 * units.ms, pulseInt=50 * units.ms,
                                            stimDur=250 * units.ms)
 pTShortInt50Dur16 = getPulseTrainInputPars(pulseDur=16 * units.ms, pulseInt=50 * units.ms,
                                            stimDur=250 * units.ms)
-
+pTShortInt50Dur20 = getPulseTrainInputPars(pulseDur=20 * units.ms, pulseInt=50 * units.ms,
+                                           stimDur=250 * units.ms)
+pTShortInt100Dur10 = getPulseTrainInputPars(pulseDur=10 * units.ms, pulseInt=100 * units.ms,
+                                           stimDur=250 * units.ms)
+pTShortInt100Dur16 = getPulseTrainInputPars(pulseDur=16 * units.ms, pulseInt=100 * units.ms,
+                                           stimDur=250 * units.ms)
+pTShortInt100Dur20 = getPulseTrainInputPars(pulseDur=20 * units.ms, pulseInt=100 * units.ms,
+                                           stimDur=250 * units.ms)
