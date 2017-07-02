@@ -15,16 +15,12 @@ simSettleTime = 600 * units.ms
 #
 simStepSize = 0.1 * units.ms
 simDuration = 150 * units.ms
-inputParsNames = [
-    # 'onePulse',
-    # 'twoPulse',
-    # 'threePulse',
-    "tenMSPulse",
-    "twentyMSPulse",
-    "thirtyMSPulse",
-    "fortyMSPulse",
-    # "fiftyMSPulse",
-]
+inputParsNames = {
+                     10: "tenMSPulse",
+                     20: "twentyMSPulse",
+                     30: "thirtyMSPulse",
+                     40: "fortyMSPulse"
+                     }
 showBefore = 50 * units.ms
 showAfter = 50 * units.ms
 
@@ -56,7 +52,7 @@ opDir = os.path.join(homeFolder, DLInt1ModelProps + DLInt2ModelProps,
 fig, axs = plt.subplots(nrows=2, ncols=len(inputParsNames), figsize=(14, 11.2),
                         sharex='col')
 
-for ipInd, ipName in enumerate(inputParsNames):
+for ipInd, (ipVal, ipName) in enumerate(inputParsNames.items()):
 
     nixFile = os.path.join(opDir, ipName, 'SimResults.h5')
     nixFile = nixio.File.open(nixFile, nixio.FileMode.ReadOnly)
@@ -95,6 +91,7 @@ for ipInd, ipName in enumerate(inputParsNames):
     axs[0, ipInd].set_ylim([-60, 10])
     axs[0, ipInd].yaxis.tick_right()
 
+
     axs[1, ipInd].plot(simpleFloat(dlint2MemVAS.times / qu.ms),
                        simpleFloat(dlint2MemVAS / qu.mV), 'b-')
     # mew needs setting for seaborn. https://github.com/mwaskom/seaborn/issues/644
@@ -114,6 +111,16 @@ for ipInd, ipName in enumerate(inputParsNames):
                             (totalSimDur + showAfter) / units.ms])
     axs[1, ipInd].set_ylim([-60, 10])
     axs[1, ipInd].yaxis.tick_right()
+
+for ind in range(len(inputParsNames) - 1):
+    axs[0, ind].set_yticks([])
+    axs[1, ind].set_yticks([])
+
+for ipInd, (ipVal, ipName) in enumerate(inputParsNames.items()):
+    axs[0, ipInd].set_title(ipVal)
+
+axs[0, 0].set_ylabel("DL-Int-1")
+axs[1, 0].set_ylabel("DL-Int-2")
 
 fig.tight_layout()
 fig.savefig(os.path.join(opDir, "shortStims.png"), dpi=300)

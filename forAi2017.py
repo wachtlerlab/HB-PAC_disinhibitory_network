@@ -12,6 +12,9 @@ from neo import AnalogSignal
 
 mplPars['xtick.labelsize'] = 10
 mplPars['ytick.labelsize'] = 10
+mplPars["text.usetex"] = False
+mplPars["font.sans-serif"] = "Arial"
+mplPars["axes.linewidth"] = 1
 sns.set(style="ticks", rc=mplPars)
 
 
@@ -27,9 +30,9 @@ simSettleTime = 600 * units.ms
 # showAfter = 50 * units.ms
 
 simStepSize = 0.1 * units.ms
-simDuration = 350 * units.ms
-# inputParsName = "pTShortInt33Dur16"
-inputParsName = "pTShortInt50Dur16"
+simDuration = 450 * units.ms
+inputParsName = "pTShortInt33Dur16"
+# inputParsName = "pTShortInt100Dur16"
 
 showBefore = 75 * units.ms
 showAfter = -30 * units.ms
@@ -91,28 +94,29 @@ dlint1SpikesST = multiTag2SpikeTrain(dlint1SpikesMT, sinInputAS.t_start, sinInpu
 dlint2SpikesST = multiTag2SpikeTrain(dlint2SpikesMT, sinInputAS.t_start, sinInputAS.t_stop)
 joSpikesST = multiTag2SpikeTrain(joSpikesMT, sinInputAS.t_start, sinInputAS.t_stop)
 
-fig0, ax0 = plt.subplots(figsize=(2.5, 2.5))
-fig1, ax1 = plt.subplots(figsize=(2.5, 2.5))
-fig2, ax2 = plt.subplots(figsize=(2.5, 2.5))
-
-# fig0, ax0 = plt.subplots(figsize=(3, 2.5))
-# fig1, ax1 = plt.subplots(figsize=(3, 2.5))
-# fig2, ax2 = plt.subplots(figsize=(3, 2.5))
+# fig0, ax0 = plt.subplots(figsize=(2.5, 1.5))
+# fig1, ax1 = plt.subplots(figsize=(2.5, 1.5))
+# fig2, ax2 = plt.subplots(figsize=(2.5, 1.75))
+#
+fig0, ax0 = plt.subplots(figsize=(2.85, 1.5))
+fig1, ax1 = plt.subplots(figsize=(2.85, 1.5))
+fig2, ax2 = plt.subplots(figsize=(2.85, 1.75))
 
 ax0.plot(simpleFloat((dlint1MemVAS.times - simSettleTimeQu) / qu.ms),
-         simpleFloat(dlint1MemVAS / qu.mV), 'k-', lw=0.7)
+         simpleFloat(dlint1MemVAS / qu.mV), 'k-', lw=0.4)
 ax1.plot(simpleFloat((dlint2MemVAS.times - simSettleTimeQu) / qu.ms),
-         simpleFloat(dlint2MemVAS / qu.mV), 'k-', lw=0.7)
+         simpleFloat(dlint2MemVAS / qu.mV), 'k-', lw=0.4)
 ax2.plot(simpleFloat((sinInputAS.times - simSettleTimeQu) / qu.ms),
-         simpleFloat(sinInputAS / qu.um), 'k-', lw=0.7)
+         simpleFloat(sinInputAS / qu.um), 'k-', lw=0.4)
 
 for ax in [ax0, ax1, ax2]:
     ax.set_xlim([(-showBefore) / units.ms,
                      (simDuration + showAfter) / units.ms])
-    ax.set_xticks([0, 100, 200, 300])
     # ax.yaxis.tick_right()
-    ax.set_yticks([])
+    ax.set_xticks([])
     ax.set_ylim([-50, 5])
+    ax.set_yticks([-40, -20, 0])
+    # ax.set_yticks([])
 
 
 for ax in [ax0, ax1]:
@@ -121,7 +125,7 @@ for ax in [ax0, ax1]:
                       [-42] * joSpikesST.shape[0],
                       linefmt='k-', markerfmt='None', basefmt='None',
                       bottom=-50)
-    plt.setp(stemlines, lw=0.7)
+    plt.setp(stemlines, lw=0.4)
 
 
 markerline, stemlines, baseline \
@@ -131,12 +135,16 @@ markerline, stemlines, baseline \
                       bottom=17)
 plt.setp(stemlines, lw=0.5)
 ax2.set_ylim([-20, 25])
+ax2.set_xticks([0, 100, 200, 300])
 
 for fig in [fig0, fig1, fig2]:
 
     fig.tight_layout()
 
-fig0.savefig(os.path.join(opDir, "DL-Int-1MemV.png"), dpi=300, bbox_inches='tight')
-fig1.savefig(os.path.join(opDir, "DL-Int-2MemV.png"), dpi=300, bbox_inches='tight')
-fig2.savefig(os.path.join(opDir, "InputSignal.png"), dpi=300, bbox_inches='tight')
+fig0.savefig(os.path.join(opDir, "DL-Int-1MemV.svg"), dpi=300,
+             bbox_inches='tight', transparent=True)
+fig1.savefig(os.path.join(opDir, "DL-Int-2MemV.svg"), dpi=300,
+             bbox_inches='tight', transparent=True)
+fig2.savefig(os.path.join(opDir, "InputSignal.svg"), dpi=300,
+             bbox_inches='tight', transparent=True)
 

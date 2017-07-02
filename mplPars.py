@@ -10,6 +10,7 @@ mplPars = {'text.usetex': True,
            'legend.fontsize': 20,
            'legend.frameon': True,
            'legend.framealpha': 0,
-           'legend.fancybox': True
+           'legend.fancybox': True,
+           'text.latex.preamble': r'\usepackage{cmbright}'
            }
 

@@ -14,23 +14,27 @@ sns.axes_style('whitegrid')
 simSettleTime = 600 * units.ms
 
 simStepSize = 0.1 * units.ms
-simDuration = 1500 * units.ms
+simDuration = 450 * units.ms
 totalSimDur = simSettleTime + simDuration
 IntDurs = [
     (20, 10),
     (20, 16),
     (33, 10),
     (33, 16),
+    (33, 20),
     (50, 10),
     (50, 16),
-    (50, 20)
+    (50, 20),
+    (100, 10),
+    (100, 16),
+    (100, 20)
 ]
 
 pulseInts = sorted(set([x[0] for x in IntDurs]))
 pulseDurs = sorted(set([x[1] for x in IntDurs]))
 
-showBefore = 200 * units.ms
-showAfter = -300 * units.ms
+showBefore = 75 * units.ms
+showAfter = -30 * units.ms
 
 DLInt1ModelProps = "DLInt1Aynur"
 
@@ -58,15 +62,16 @@ opDir = os.path.join(homeFolder, DLInt1ModelProps + DLInt2ModelProps,
                      DLInt1SynapseProps + DLInt2SynapseProps + DLInt1DLInt2SynProps)
 
 fig1, axs1 = plt.subplots(nrows=len(pulseDurs), ncols=len(pulseInts),
-                          figsize=(14, 11.2), sharex='all', sharey='all')
+                          figsize=(14, 11.2), sharex='col')
 fig2, axs2 = plt.subplots(nrows=len(pulseDurs), ncols=len(pulseInts),
-                          figsize=(14, 11.2), sharex='all', sharey="all")
-
+                          figsize=(14, 11.2), sharex='col')
+fig3, axs3 = plt.subplots(nrows=len(pulseDurs), ncols=len(pulseInts),
+                          figsize=(14, 11.2), sharex='col')
 for IntDur in IntDurs:
 
     pulseInt = IntDur[0]
     pulseDur = IntDur[1]
-    inputParsName = 'pulseTrainInt{:d}Dur{:d}'.format(pulseInt, pulseDur)
+    inputParsName = 'pTShortInt{:2d}Dur{:2d}'.format(pulseInt, pulseDur)
     opDirWith = os.path.join(homeFolder, DLInt1ModelProps + DLInt2ModelProps,
                          DLInt1SynapseProps + DLInt2SynapseProps + DLInt1DLInt2SynProps,
                          inputParsName)
@@ -120,12 +125,15 @@ for IntDur in IntDurs:
 
     axs2[rowInd, colInd].plot(simpleFloat(dlint2MemVAS.times / qu.ms),
                               simpleFloat(dlint2MemVAS / qu.mV), 'b-')
-    axs2[rowInd, colInd].plot(simpleFloat(dlint2MemVASWithout.times / qu.ms),
+    axs3[rowInd, colInd].plot(simpleFloat(dlint2MemVASWithout.times / qu.ms),
                               simpleFloat(dlint2MemVASWithout / qu.mV), 'r-')
     axs2[rowInd, colInd].plot(simpleFloat(dlint2SpikesST.times / qu.ms),
                               [4] * dlint2SpikesST.shape[0],
                             'b|', ms=8, mew=1)
-    axs2[rowInd, colInd].plot(simpleFloat(dlint2SpikesSTWithout.times / qu.ms),
+    axs3[rowInd, colInd].plot(simpleFloat(dlint2SpikesST.times / qu.ms),
+                              [4] * dlint2SpikesST.shape[0],
+                              'b|', ms=8, mew=1)
+    axs3[rowInd, colInd].plot(simpleFloat(dlint2SpikesSTWithout.times / qu.ms),
                               [8] * dlint2SpikesSTWithout.shape[0],
                               'r|', ms=8, mew=1)
     axs2[rowInd, colInd].plot(simpleFloat(sinInputAS.times / qu.ms),
@@ -133,31 +141,60 @@ for IntDur in IntDurs:
                               , 'k-')
     axs2[rowInd, colInd].set_xlim([(simSettleTime - showBefore) / units.ms,
                                    (totalSimDur + showAfter) / units.ms])
+    axs3[rowInd, colInd].plot(simpleFloat(sinInputAS.times / qu.ms),
+                              simpleFloat(((5 * qu.um * sinInputAS) - 50 * qu.um) / qu.um)
+                              , 'k-')
+    axs3[rowInd, colInd].set_xlim([(simSettleTime - showBefore) / units.ms,
+                                   (totalSimDur + showAfter) / units.ms])
 
 
-for ax in axs1.flat:
-    ax.set_ylim([-60, 10])
-    ax.yaxis.tick_right()
+for rowInd in range(axs1.shape[0]):
+    for colInd in range(axs1.shape[1]):
+        ax = axs1[rowInd, colInd]
+        ax.set_ylim([-60, 10])
+        ax.yaxis.tick_right()
 
-for ax in axs2.flat:
-    ax.set_ylim([-60, 10])
-    ax.yaxis.tick_right()
+        if colInd < axs1.shape[1] - 1:
+            ax.set_yticks([])
+
+for rowInd in range(axs2.shape[0]):
+    for colInd in range(axs2.shape[1]):
+        ax = axs2[rowInd, colInd]
+        ax.set_ylim([-60, 10])
+        ax.yaxis.tick_right()
+
+        if colInd < axs2.shape[1] - 1:
+            ax.set_yticks([])
+
+for rowInd in range(axs3.shape[0]):
+    for colInd in range(axs3.shape[1]):
+        ax = axs3[rowInd, colInd]
+        ax.set_ylim([-60, 10])
+        ax.yaxis.tick_right()
+
+        if colInd < axs3.shape[1] - 1:
+            ax.set_yticks([])
 
 for ind, val in enumerate(pulseInts):
 
     axs1[0, ind].set_title(str(val))
     axs2[0, ind].set_title(str(val))
+    axs3[0, ind].set_title(str(val))
+
 
 for ind, val in enumerate(pulseDurs):
 
     axs1[ind, 0].set_ylabel(str(val))
     axs2[ind, 0].set_ylabel(str(val))
+    axs3[ind, 0].set_ylabel(str(val))
 
 
 fig1.tight_layout()
 fig2.tight_layout()
+fig3.tight_layout()
 fig1.savefig(os.path.join(opDir, 'DLInt1Summary.png'), dpi=150)
-fig2.savefig(os.path.join(opDir, 'DLInt2Summary.png'), dpi=150)
+fig2.savefig(os.path.join(opDir, 'DLInt2SummaryWithDLInt1Syn.png'), dpi=150)
+fig3.savefig(os.path.join(opDir, 'DLInt2SummaryWithoutDLInt1Syn.png'), dpi=150)
 
 
 

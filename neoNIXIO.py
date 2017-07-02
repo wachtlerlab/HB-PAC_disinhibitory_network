@@ -59,7 +59,6 @@ def dataArray2AnalogSignal(dataArray):
 
     analogSignal.name = dataArray.name
 
-    analogSignal = analogSignal.reshape((analogSignal.shape[0],))
     return analogSignal
 
 #***********************************************************************************************************************
@@ -268,15 +267,18 @@ def addTag(name, type, position, blk, refs, metadata=None, extent=None):
 
 def simpleFloat(quant):
     '''
-    Float(s) of simplified version(s) of a quantity.Quantity or an iterable of quantity.Quantity objects
+    Float or List of float(s) of simplified version of a quantity that can be
+    effectively represented as a float or list of floats.
     :param quant: a quantity.Quantity or an iterable of quantity.Quantity objects
-    :return: float or iterable of floats
+    :return: float or iterable of floats depending on the argument quant
     '''
 
+    # one element quantity
     if quant.shape == ():
 
         return float(quant.simplified)
 
+    # 1D quantity
     elif len(quant.shape) == 1:
 
         if quant.shape[0]:
@@ -287,8 +289,28 @@ def simpleFloat(quant):
 
             return []
 
+    # 2D quantity
+    elif len(quant.shape) == 2:
+
+        if quant.shape[0]:
+
+            # 2D column quantity
+            if quant.shape[1] == 1:
+                return quant.simplified.magnitude[:, 0].tolist()
+
+            # 2D row quantity
+            if quant.shape[0] == 1:
+                return quant.simplified.magnitude[0, :].tolist()
+
+            else:
+                raise (TypeError('simpleFloat only supports scalar, '
+                                 '1D, 2D row and 2D column quantities'))
+        else:
+            return []
+
     else:
 
-        raise(ValueError('simpleFloat only supports scalar and 1D quantities'))
+        raise(TypeError('simpleFloat only supports scalar, '
+                        '1D, 2D row and 2D column quantities'))
 
 #***********************************************************************************************************************

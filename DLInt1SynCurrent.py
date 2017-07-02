@@ -56,8 +56,8 @@ DLInt1SynapsePropsI = 'DLInt1_syn_try2_i'
 DLInt1SynapseProps = "-".join((DLInt1SynapsePropsE, DLInt1SynapsePropsI))
 
 
-# opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
-opDir = "/tmp/justDLInt1"
+opDir = os.path.join(homeFolder, DLInt1ModelProps, DLInt1SynapseProps, inputParsName)
+
 
 opFile = os.path.join(opDir, 'SynCurrentTraces.png')
 OPNixFile = os.path.join(opDir, 'simResWithSynCurrents.h5')

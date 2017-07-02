@@ -28,9 +28,27 @@ simDuration = 150 * units.ms
 # inputParsName = 'onePulse'
 # inputParsName = 'twoPulse'
 # inputParsName = 'threePulse'
-inputParsName = "fortyMSPulse"
+inputParsName = "thirtyMSPulse"
+# inputParsName = "fortyMSPulse"
 showBefore = 50 * units.ms
 showAfter = 50 * units.ms
+
+# simStepSize = 0.1 * units.ms
+# simDuration = 450 * units.ms
+# # inputParsName = "pTShortInt20Dur10"
+# # inputParsName = "pTShortInt20Dur16"
+# # inputParsName = "pTShortInt33Dur10"
+# # inputParsName = "pTShortInt33Dur16"
+# # inputParsName = "pTShortInt33Dur20"
+# # inputParsName = "pTShortInt50Dur10"
+# # inputParsName = "pTShortInt50Dur16"
+# # inputParsName = "pTShortInt50Dur20"
+# inputParsName = "pTShortInt100Dur10"
+# # inputParsName = "pTShortInt100Dur16"
+# # inputParsName = "pTShortInt100Dur20"
+#
+# showBefore = 100 * units.ms
+# showAfter = 100 * units.ms
 
 # simStepSize = 0.1 * units.ms
 # simDuration = 1500 * units.ms

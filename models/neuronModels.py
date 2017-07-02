@@ -194,35 +194,6 @@ class VSNeuron(object):
 
 
 
-    # def addSynapses(self, name: str, nSyn: int, sourceNG: NeuronGroup, model: str,
-    #                    weight: Quantity, Esyn: Quantity,
-    #                    tau1: Quantity, tau2: Quantity, delay: Quantity,
-    #                    sourceInd: int = 0, destInd: int = 0):
-    #
-    #     assert name not in self.incomingSynapses, 'A Synapse with {} already exists'.format(name)
-    #     assert len(weight) == nSyn, "{} weights expected, {} were given".format(nSyn, nSyn + 1)
-    #     assert len(Esyn) == nSyn, "{} Esyns expected, {} were given".format(nSyn, nSyn + 1)
-    #     assert len(tau1) == nSyn, "{} tau1s expected, {} were given".format(nSyn, nSyn + 1)
-    #     assert len(tau2) == nSyn, "{} tau2s expected, {} were given".format(nSyn, nSyn + 1)
-    #     assert len(delay) == nSyn, "{} delays expected, {} were given".format(nSyn, nSyn + 1)
-    #
-    #     syn = Synapses(sourceNG, self.ng,
-    #                    model=exp2SynEqs,
-    #                    on_pre="A += w_pre\nB += w_pre",
-    #                    method="euler", multisynaptic_index='synInd')
-    #
-    #     self.incomingSynapses[name] = syn
-    #     syn.connect(i=sourceInd, j=destInd, n=nSyn)
-    #
-    #     syn.w_pre[sourceInd, destInd, :] = weight
-    #     syn.Esyn[sourceInd, destInd, :] = Esyn
-    #     syn.A[sourceInd, destInd, :] = 0 * units.siemens
-    #     syn.B[sourceInd, destInd, :] = 0 * units.siemens
-    #     syn.tau1[sourceInd, destInd, :] = tau1
-    #     syn.tau2[sourceInd, destInd, :] = tau2
-    #     syn.delay[sourceInd, destInd, :] = delay
-
-
 
 class JOSpikes265(object):
 

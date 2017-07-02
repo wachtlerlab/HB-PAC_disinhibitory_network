@@ -18,9 +18,28 @@ simDuration = 150 * units.ms
 # inputParsName = 'onePulse'
 # inputParsName = 'twoPulse'
 # inputParsName = 'threePulse'
-inputParsName = "fortyMSPulse"
+inputParsName = "thirtyMSPulse"
+# inputParsName = "fortyMSPulse"
+
 showBefore = 50 * units.ms
-showAfter = 50 * units.ms
+showAfter = 0 * units.ms
+
+# simStepSize = 0.1 * units.ms
+# simDuration = 450 * units.ms
+# # inputParsName = "pTShortInt20Dur10"
+# # inputParsName = "pTShortInt20Dur16"
+# # inputParsName = "pTShortInt33Dur10"
+# # inputParsName = "pTShortInt33Dur16"
+# # inputParsName = "pTShortInt33Dur20"
+# # inputParsName = "pTShortInt50Dur10"
+# # inputParsName = "pTShortInt50Dur16"
+# # inputParsName = "pTShortInt50Dur20"
+# inputParsName = "pTShortInt100Dur10"
+# # inputParsName = "pTShortInt100Dur16"
+# # inputParsName = "pTShortInt100Dur20"
+#
+# showBefore = 100 * units.ms
+# showAfter = 100 * units.ms
 
 # simStepSize = 0.1 * units.ms
 # simDuration = 1500 * units.ms
@@ -78,80 +97,104 @@ dlint1SpikesST = multiTag2SpikeTrain(dlint1SpikesMT, sinInputAS.t_start, sinInpu
 dlint2SpikesST = multiTag2SpikeTrain(dlint2SpikesMT, sinInputAS.t_start, sinInputAS.t_stop)
 joSpikesST = multiTag2SpikeTrain(joSpikesMT, sinInputAS.t_start, sinInputAS.t_stop)
 
-fig1, ax1 = plt.subplots(nrows=2, figsize=(7, 5.6), sharex='col')
-ax1[0].plot(simpleFloat(dlint1MemVAS.times / qu.ms),
+fig1, ax1 = plt.subplots(nrows=2, ncols=2, figsize=(14, 11.2), sharex='col')
+ax1[0, 0].plot(simpleFloat(dlint1MemVAS.times / qu.ms),
             simpleFloat(dlint1MemVAS / qu.mV), 'b-')
 markerline, stemlines, baseline \
-    = ax1[0].stem(simpleFloat(joSpikesST.times / qu.ms),
-                  [ax1[0].get_ylim()[1]] * joSpikesST.shape[0],
-                  linefmt='r-.', markerfmt='None', basefmt='None',
-                  bottom=ax1[0].get_ylim()[0])
+    = ax1[0, 0].stem(simpleFloat(joSpikesST.times / qu.ms),
+                     [dlint1MemVAS.magnitude.min()] * joSpikesST.shape[0],
+                     linefmt='r-.', markerfmt='None', basefmt='None',
+                     bottom=-52.5)
 plt.setp(stemlines, color=(0.5, 0.5, 0.5), lw=2)
-ax1[0].axis('off')
+markerline, stemlines, baseline \
+    = ax1[0, 0].stem(simpleFloat(joSpikesST.times / qu.ms),
+                     [10] * joSpikesST.shape[0],
+                     linefmt='r-.', markerfmt='None', basefmt='None',
+                     bottom=dlint1MemVAS.magnitude.max())
+plt.setp(stemlines, color=(0.5, 0.5, 0.5), lw=2)
 
-ax1[1].plot(simpleFloat(isynEASDLInt1.times / qu.ms),
-            simpleFloat(isynEASDLInt1 / qu.nA), color=[0, 0.6, 0],
-            ls='-', marker='None')
-ax1[1].plot(simpleFloat(isynIASDLInt1.times / qu.ms),
+ax1[0, 0].plot(simpleFloat(sinInputAS.times / qu.ms),
+               simpleFloat((sinInputAS * 2.5 - 55 * qu.um) / qu.um),
+               'k-')
+
+ax1[0, 1].plot(simpleFloat(isynEASDLInt1.times / qu.ms),
+               simpleFloat(isynEASDLInt1 / qu.nA), color=[0, 0.6, 0],
+               ls='-', marker='None')
+ax1[0, 1].plot(simpleFloat(isynIASDLInt1.times / qu.ms),
             simpleFloat(isynIASDLInt1 / qu.nA), color=[1, 0, 0],
             ls='-', marker='None')
 markerline, stemlines, baseline \
-    = ax1[1].stem(simpleFloat(joSpikesST.times / qu.ms),
-                  [ax1[1].get_ylim()[1]] * joSpikesST.shape[0],
+    = ax1[0, 1].stem(simpleFloat(joSpikesST.times / qu.ms),
+                  [isynIASDLInt1.magnitude.min()] * joSpikesST.shape[0],
                   linefmt='r-.', markerfmt='None', basefmt='None',
-                  bottom=ax1[1].get_ylim()[0])
+                  bottom=-5.125)
 plt.setp(stemlines, color=(0.5, 0.5, 0.5), lw=2)
 
-ax1[1].set_xlim([(simSettleTime - showBefore) / units.ms,
-                     (totalSimDur + showAfter) / units.ms])
-ax1[1].axis('off')
+markerline, stemlines, baseline \
+    = ax1[0, 1].stem(simpleFloat(joSpikesST.times / qu.ms),
+                     [5] * joSpikesST.shape[0],
+                     linefmt='r-.', markerfmt='None', basefmt='None',
+                     bottom=isynEASDLInt1.magnitude.max())
+plt.setp(stemlines, color=(0.5, 0.5, 0.5), lw=2)
 
-fig2, ax2 = plt.subplots(nrows=2, figsize=(7, 5.6), sharex='col')
-ax2[0].plot(simpleFloat(dlint2MemVAS.times / qu.ms),
+ax1[0, 1].plot(simpleFloat(sinInputAS.times / qu.ms),
+               simpleFloat((sinInputAS * 0.375 - 5.5 * qu.um) / qu.um),
+               'k-')
+
+ax1[1, 0].plot(simpleFloat(dlint2MemVAS.times / qu.ms),
             simpleFloat(dlint2MemVAS / qu.mV), 'b-')
 markerline, stemlines, baseline \
-    = ax2[0].stem(simpleFloat(joSpikesST.times / qu.ms),
-                  [ax2[0].get_ylim()[1]] * joSpikesST.shape[0],
+    = ax1[1, 0].stem(simpleFloat(joSpikesST.times / qu.ms),
+                  [dlint2MemVAS.magnitude.min()] * joSpikesST.shape[0],
                   linefmt='r-.', markerfmt='None', basefmt='None',
-                  bottom=ax2[0].get_ylim()[0])
+                  bottom=-52.5)
 plt.setp(stemlines, color=(0.5, 0.5, 0.5), lw=2)
-ax2[0].axis('off')
 
-ax2[1].plot(simpleFloat(isynEASDLInt2.times / qu.ms),
+markerline, stemlines, baseline \
+    = ax1[1, 0].stem(simpleFloat(joSpikesST.times / qu.ms),
+                     [10] * joSpikesST.shape[0],
+                     linefmt='r-.', markerfmt='None', basefmt='None',
+                     bottom=dlint2MemVAS.magnitude.max())
+plt.setp(stemlines, color=(0.5, 0.5, 0.5), lw=2)
+
+ax1[1, 0].plot(simpleFloat(sinInputAS.times / qu.ms),
+               simpleFloat((sinInputAS * 2.5 - 55 * qu.um) / qu.um),
+               'k-')
+
+ax1[1, 1].plot(simpleFloat(isynEASDLInt2.times / qu.ms),
             simpleFloat(isynEASDLInt2 / qu.nA), color=[0, 0.6, 0],
             ls='-', marker='None')
-ax2[1].plot(simpleFloat(isynIASDLInt2.times / qu.ms),
+ax1[1, 1].plot(simpleFloat(isynIASDLInt2.times / qu.ms),
             simpleFloat(isynIASDLInt2 / qu.nA), color=[1, 0, 0],
             ls='-', marker='None')
 markerline, stemlines, baseline \
-    = ax2[1].stem(simpleFloat(joSpikesST.times / qu.ms),
-                  [ax2[1].get_ylim()[1]] * joSpikesST.shape[0],
+    = ax1[1, 1].stem(simpleFloat(joSpikesST.times / qu.ms),
+                  [isynIASDLInt2.magnitude.min()] * joSpikesST.shape[0],
                   linefmt='r-.', markerfmt='None', basefmt='None',
-                  bottom=ax2[1].get_ylim()[0])
+                  bottom=-5.125)
 plt.setp(stemlines, color=(0.5, 0.5, 0.5), lw=2)
 
-ax2[1].set_xlim([(simSettleTime - showBefore) / units.ms,
-                     (totalSimDur + showAfter) / units.ms])
-ax2[1].axis('off')
-
-fig3, ax3 = plt.subplots(figsize=(7, 5.6))
-ax3.plot(simpleFloat(sinInputAS.times / qu.ms),
-         sinInputAS, 'k-')
-
-ax3.set_xlim([(simSettleTime - showBefore) / units.ms,
-                     (totalSimDur + showAfter) / units.ms])
 markerline, stemlines, baseline \
-    = ax3.stem(simpleFloat(joSpikesST.times / qu.ms),
-                  [ax3.get_ylim()[1]] * joSpikesST.shape[0],
+    = ax1[1, 1].stem(simpleFloat(joSpikesST.times / qu.ms),
+                  [5] * joSpikesST.shape[0],
                   linefmt='r-.', markerfmt='None', basefmt='None',
-                  bottom=ax3.get_ylim()[0])
+                  bottom=isynEASDLInt2.magnitude.max())
 plt.setp(stemlines, color=(0.5, 0.5, 0.5), lw=2)
-ax3.axis('off')
 
+ax1[1, 1].plot(simpleFloat(sinInputAS.times / qu.ms),
+               simpleFloat((sinInputAS * 0.375 - 5.5 * qu.um) / qu.um),
+               'k-')
 
-for fig in [fig1, fig2, fig3]:
+ax1[1, 0].set_xlim([(simSettleTime - showBefore) / units.ms,
+                     (totalSimDur + showAfter) / units.ms])
+
+ax1[1, 1].set_xlim([(simSettleTime - showBefore) / units.ms,
+                     (totalSimDur + showAfter) / units.ms])
+ax1[0, 1].yaxis.tick_right()
+ax1[1, 1].yaxis.tick_right()
+
+for fig in [fig1]:
     fig.tight_layout()
 
-fig1.savefig(os.path.join(opDir, "DL-Int-1memVSynCurrents.png"), dpi=150)
-fig2.savefig(os.path.join(opDir, "DL-Int-2memVSynCurrents.png"), dpi=150)
-fig3.savefig(os.path.join(opDir, "Input.png"), dpi=150)
+fig1.savefig(os.path.join(opDir, "DLInt-1_2memVSynCurrents.png"), dpi=150)
+
