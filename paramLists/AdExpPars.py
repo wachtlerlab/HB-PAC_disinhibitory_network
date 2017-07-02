@@ -1,3 +1,8 @@
+# Most of these parameters are part of the work by Aynur Makhsutov
+# during AMGEN program 2016 at Wachtlerlab, LMU. The last few parameters sets
+# that start with "DLInt" have been newly added.
+
+
 from brian2 import nA, mV, ms, nS, pF, nF, uA, uF
 
 
