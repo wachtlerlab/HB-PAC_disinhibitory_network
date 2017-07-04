@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from neoNIXIO import multiTag2SpikeTrain, dataArray2AnalogSignal, simpleFloat
 import quantities as qu
 
-sns.set(style="whitegrid", rc=mplPars)
+sns.set(rc=mplPars)
 
 
 simSettleTime = 600 * units.ms
@@ -190,8 +190,11 @@ ax1[1, 0].set_xlim([(simSettleTime - showBefore) / units.ms,
 
 ax1[1, 1].set_xlim([(simSettleTime - showBefore) / units.ms,
                      (totalSimDur + showAfter) / units.ms])
-ax1[0, 1].yaxis.tick_right()
-ax1[1, 1].yaxis.tick_right()
+
+for ax in ax1.flat:
+    ax.set_xticklabels([""] * len(ax.get_xticks()))
+    ax.set_yticklabels([""] * len(ax.get_yticks()))
+
 
 for fig in [fig1]:
     fig.tight_layout()

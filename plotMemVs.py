@@ -13,7 +13,7 @@ mplPars["font.size"] = 14
 mplPars["xtick.labelsize"] = 12
 mplPars["ytick.labelsize"] = 12
 mplPars["legend.fontsize"] = 12
-sns.set(style="whitegrid", rc=mplPars)
+sns.set(rc=mplPars)
 
 
 simSettleTime = 600 * units.ms
@@ -111,11 +111,13 @@ axs1[1].plot(simpleFloat(sinInputAS.times / qu.ms),
                 simpleFloat((sinInputAS * 2.5 - 55 * qu.um) / qu.um),
                'k-', lw=0.5)
 axs1[1].set_ylabel("DL-Int-2")
-axs1[1].set_xlabel("Time (ms)")
+# axs1[1].set_xlabel("Time (ms)")
 
 axs1[1].set_xlim([(simSettleTime - showBefore) / units.ms,
                      (totalSimDur + showAfter) / units.ms])
-
+axs1[0].set_yticklabels([""] * len(axs1[1].get_yticks()))
+axs1[1].set_yticklabels([""] * len(axs1[1].get_yticks()))
+axs1[1].set_xticklabels([""] * len(axs1[1].get_xticks()))
 
 for fig in [fig1]:
     fig.tight_layout()
