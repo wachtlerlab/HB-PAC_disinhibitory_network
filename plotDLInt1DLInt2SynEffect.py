@@ -110,22 +110,23 @@ for IntDur in IntDurs:
     colInd = pulseInts.index(pulseInt)
 
     axs1[rowInd, colInd].plot(simpleFloat(dlint1MemVAS.times / qu.ms),
-                              simpleFloat(dlint1MemVAS / qu.mV), 'b-')
+                              simpleFloat(dlint1MemVAS / qu.mV), 'b-', lw=1)
     # mew needs setting for seaborn. https://github.com/mwaskom/seaborn/issues/644
     axs1[rowInd, colInd].plot(simpleFloat(dlint1SpikesST.times / qu.ms),
                               [4] * dlint1SpikesST.shape[0],
                               'b|', ms=8, mew=1)
     axs1[rowInd, colInd].plot(simpleFloat(sinInputAS.times / qu.ms),
-                              simpleFloat(((5 * qu.um * sinInputAS) - 50 * qu.um) / qu.um)
-                              , 'k-')
+                              simpleFloat(-50 + (sinInputAS * 5) / qu.um)
+                              , 'k-', lw=1)
     axs1[rowInd, colInd].set_xlim([(simSettleTime - showBefore) / units.ms,
                                    (totalSimDur + showAfter) / units.ms])
 
 
     axs2[rowInd, colInd].plot(simpleFloat(dlint2MemVAS.times / qu.ms),
-                              simpleFloat(dlint2MemVAS / qu.mV), 'b-')
+                              simpleFloat(dlint2MemVAS / qu.mV), 'b-', lw=1)
     axs2[rowInd, colInd].plot(simpleFloat(dlint2MemVASWithout.times / qu.ms),
-                              simpleFloat(-50 + (dlint2MemVASWithout / qu.mV)), 'r-')
+                              simpleFloat(-45 + (dlint2MemVASWithout / qu.mV)),
+                              'r-', lw=1)
     axs2[rowInd, colInd].plot(simpleFloat(dlint2SpikesST.times / qu.ms),
                               [12] * dlint2SpikesST.shape[0],
                             'b|', ms=8, mew=1)
@@ -133,8 +134,8 @@ for IntDur in IntDurs:
                               [6] * dlint2SpikesSTWithout.shape[0],
                               'r|', ms=8, mew=1)
     axs2[rowInd, colInd].plot(simpleFloat(sinInputAS.times / qu.ms),
-                              simpleFloat(-90 + ((25 * qu.um * sinInputAS) / qu.um))
-                              , 'k-')
+                              simpleFloat(-105 + (sinInputAS * 7.5) / qu.um)
+                              , 'k-', lw=1)
     axs2[rowInd, colInd].set_xlim([(simSettleTime - showBefore) / units.ms,
                                    (totalSimDur + showAfter) / units.ms])
 
