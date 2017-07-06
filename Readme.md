@@ -24,7 +24,7 @@ Here is an overview of the contents:
 |  
 +-- dirDefs.py: directory definitions imported in other scripts  
 |  
-+-- DLInt1SynCurrent.py: Script to simulate DL-Int-1 recording membrane potential and synaptic currents in NIX files  
++-- DLInt1SynCurrent.py: Script to simulate DL-Int-1 recording membrane potential and synaptic currents in [NIX](https://github.com/G-Node/nixpy) files  
 |  
 +-- DLInt2try.py: Legacy code  
 |  
@@ -36,7 +36,7 @@ Here is an overview of the contents:
 |  
 +-- mplPars.py: matplotlib rc parameters  
 |  
-+-- neoNIXIO.py: adapted from GJEMS, utility functions to work jointly with NIX and neo.  
++-- neoNIXIO.py: adapted from GJEMS, utility functions to work jointly with [NIX](https://github.com/G-Node/nixpy) and [neo](https://github.com/NeuralEnsemble/python-neo).  
 |  
 +-- plotDLInt1DLInt2SynEffects.py: script to plot summary of DL-Int-1 and DL-Int-2 responses to pulse trains.  
 |  
@@ -44,8 +44,8 @@ Here is an overview of the contents:
 |  
 +-- plotSynCurrents.py: script to plot membrane potential and synaptic currents of DL-Int-1 and DL-Int-2 for one stimulus.  
 |  
-+-- runJODLInt1DLInt2Multiple.py: script to simulate the network for multiple stimulii. Out is saved as a NIX File.  
++-- runJODLInt1DLInt2Multiple.py: script to simulate the network for multiple stimulii. Out is saved as a [NIX](https://github.com/G-Node/nixpy) File.  
 |  
-+-- simSynCurrents.py: script to simulate DL-Int-1 and DL-Int-2 recording membrane potential and synaptics currents in a NIXFile.  
++-- simSynCurrents.py: script to simulate DL-Int-1 and DL-Int-2 recording membrane potential and synaptics currents in a [NIX](https://github.com/G-Node/nixpy) file.  
 
 
